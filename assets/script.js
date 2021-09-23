@@ -1,21 +1,23 @@
 let timer = document.querySelector('#timer');
+let currentQuestion = 0;
+let timeLeft = 50;
 
 let questions = [
     {question: 'Commonly used data types DO NOT include:',
     choices: {1:'strings', 2:'booleans', 3:'alerts', 4:'numbers'},
-    answer: '3'},
-    {question: 'Commonly used data types DO NOT include:',
-    choices: {1:'strings', 2:'booleans', 3:'alerts', 4:'numbers'},
-    answer: '3'},
-    {question: 'Commonly used data types DO NOT include:',
-    choices: {1:'strings', 2:'booleans', 3:'alerts', 4:'numbers'},
-    answer: '3'},
-    {question: 'Commonly used data types DO NOT include:',
-    choices: {1:'strings', 2:'booleans', 3:'alerts', 4:'numbers'},
-    answer: '3'},
-    {question: 'Commonly used data types DO NOT include:',
-    choices: {1:'strings', 2:'booleans', 3:'alerts', 4:'numbers'},
-    answer: '3'}
+    answer: 3},
+    {question: 'The condition in an if/else statement is enclosed with _____.',
+    choices: {1:'quotes', 2:'curly brackets', 3:'parenthesis', 4:'square brackets'},
+    answer: 2},
+    {question: 'Arrays in JavaScript can be used to store _____.',
+    choices: {1:'numbers and strings', 2:'other arrays', 3:'booleans', 4:'all of the above'},
+    answer: 4},
+    {question: 'String values must be enclosed within _____ when being assigned to variables.',
+    choices: {1:'commas', 2:'quotes', 3:'curly brackets', 4:'parenthesis'},
+    answer: 2},
+    {question: 'A very useful tool used during development and debugging for printing content to the debugger is:',
+    choices: {1:'JavaScript', 2:'terminal/bash', 3:'for loops', 4:'console.log'},
+    answer: 4}
 ];
 
 function welcomePage() {
@@ -33,7 +35,6 @@ function welcomePage() {
 welcomePage();
 
 function startTimer() {
-    let timeLeft = 5;
     let timeInterval = setInterval(function () {
         if (timeLeft > 1) {
             timer.textContent = timeLeft + ' seconds remaining';
@@ -48,12 +49,47 @@ function startTimer() {
 }
 
 function question() {
-    let currentQuestion = 0;
     let {question, choices, answer} = questions[currentQuestion];
     let answers = [];
     for (choice in choices) {
-        answers.push(`<button name='quuestions${currentQuestion}' onclick='validateAnswer(${choice})'>${choice}${choices[choice]}</button>`)
+        answers.push(`<div><button name='question${currentQuestion}' onclick='checkAnswer(${choice})'>${choice}${choices[choice]}</button></div>`)
     }
-    let output = `<div id='questionTitle'>${questions}</div><div>${answers.join('')}</div>`
-    main.innerHTML = output;
+    let quiz = `<div id='questionTitle'>${question}</div><div>${answers.join('')}</div>`
+    main.innerHTML = quiz;
+}
+
+function checkAnswer(answer) {
+    let corrAnswer = questions[currentQuestion].answer;
+    let nextQuestion = function() {
+        currentQuestion += 1;
+        if (currentQuestion === questions.length) {
+            saveScore();
+            clearInterval(timer);
+        } else {
+            question();
+        }
+    }
+    if (answer == corrAnswer) {
+        nextQuestion();
+    } else {
+        timeLeft -= 10;
+        nextQuestion();
+    }
+}
+
+function saveScore() {
+    let scoreScreen = `<h1>Save Score</h1>
+                        <div id='highscore-form'>
+                            <label for='score'>Total Score: ${timeLeft}</label>
+                            <br>
+                            <label for='initials'>Initials:</label>
+                            <input id='initials' type='text' name='Initials'>
+                            <button id='submit'>Submit</button>
+                        </div>`
+    main.innerHTML = scoreScreen;
+    let form = document.getElementById('submit');
+    form.addEventListener('click', save());
+    function save() {
+        console.log('brr');
+    }
 }
