@@ -1,4 +1,14 @@
 * {
     background-color: black;
     color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+}
+
+main {
+    text-align: center;
 }
