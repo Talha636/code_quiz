@@ -44,7 +44,6 @@ function startTimer() {
         } else {
             timer.textContent = '';
             clearInterval(timeInterval);
-            // displayScore();
         }
     }, 1000);
     question();
