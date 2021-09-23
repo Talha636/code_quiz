@@ -1,3 +1,4 @@
+let scoreBtn = document.querySelector('#highscore');
 let timer = document.querySelector('#timer');
 let currentQuestion = 0;
 let timeLeft = 50;
@@ -31,6 +32,7 @@ function welcomePage() {
     startBtn.innerHTML = 'Start Quiz';
     main.appendChild(startBtn);
     startBtn.addEventListener('click', startTimer);
+    scoreBtn.addEventListener('click', showScore);
 }
 welcomePage();
 
@@ -90,6 +92,27 @@ function saveScore() {
     let form = document.getElementById('submit');
     form.addEventListener('click', save());
     function save() {
-        console.log('brr');
+        let initials = document.getElementById('initials').value;
+        let highScore = localStorage.getItem('hiscore');
+        let highScoreLocal = highScore ? JSON.parse(highScores) : [];
+        highScoreLocal.push({
+            score: timeLeft,
+            initials
+        });
+        localStorage.setItem('highscores', JSON.stringify(highScoreLocal));
+        showScore();
     }
+}
+
+function showScore() {
+    let highScore = localStorage.getItem('highscore');
+    let savedScore = highscore ? JSON.parse(highScore) : [];
+    let score = savedScore.map(highscore => {
+        return `<div>Name: ${highScore.initials}
+                Score: ${highScore.score}</div>`
+    });
+    main.innerHTML = `${score.join('')}<div><button id='back'>Back</button></div>`;
+    document.getElementById('back').addEventListener('click', () => {
+        location.reload();
+    })
 }
